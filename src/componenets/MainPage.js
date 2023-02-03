@@ -1,56 +1,61 @@
-import './MainPage.css';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import './MainPage.css'
 import axios from 'axios';
-
+import { Link } from 'react-router-dom';
 const MainPage = () => {
-    let [ producsts, setProducts] = useState([])
-    useEffect(()=>{
-    axios.get("https://8ba575b1-7cc3-4b1e-820c-3ed99ac85ea2.mock.pstmn.io/products")
-    .then((result)=>{
-        producsts=result.data.producsts;
-        setProducts(producsts)
-    })
-    .catch((error)=>{
-        console.log(`error:${error}`)
-    })
-    },[]);
+    let [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        axios.get(' https://8ba575b1-7cc3-4b1e-820c-3ed99ac85ea2.mock.pstmn.io/products')
+        .then((result) => {
+            products = result.data.products;
+            setProducts(products);
+        }).catch((error) => {
+            console.log(`통신실패 : ${error}`)
+        });
+    }, []);
+
     return (
         <div>
-             <div id="header-area">
-                <div id="header">
-                    <img src="images/icons/logo.png" alt="logo" />
+            <div id="header">
+                <div id="header-area">
+                    <img src="./images/icons/logo.png" alt="logo" />
                 </div>
             </div>
             <div id="body">
                 <div id="banner">
-                    <img src="images/banners/banner1.png" alt="main" />
+                    <img src="./images/banners/banner1.png" alt="mainImg" />
                 </div>
-                <h1>Producsts</h1>
-                <div id="producst-list">
-                    {producsts.map((product,idx)=>{
-                        return(
-                           <div className='producst-acrd' key={idx}>
-                            <div>
-                                <img src='{product.imageUrl}' alt='{product.name}' className='producst-img' />
-                            </div>
-                            <div className='producst-contents'>
-                                <span className='product-name'>{product.name}</span>
-                                <span className='product-price'>{product.price}</span>
-                                <span className='product-seller'>
-                                    <img src='./images/icons/avatar.png'/>
-                                    <spna>{product.seller}</spna>
-                                </span>
-                            </div>
-                           </div>
-                        )
+                <h1>Products</h1>
+                <div id="product-list">
+                    {products.map((product, idx) => {
+                      return (
+                        <div className="product-card" key={idx}>
+                           <Link className='product-link' to ={`/ProductPage/${idx}`}>
+                                <div>
+                                    <img src={product.imageUrl} alt={product.name} className="product-img" />
+                                </div>
+                                <div className="product-contents">
+                                    <span className="product-name">{product.name}</span>
+                                    <span className="product-price">{product.price}</span>
+                                    <span className="product-seller">
+                                        <img src="./images/icons/avatar.png" alt="" className="product-avatar" />
+                                        <span>{product.seller}</span>
+                                    </span>
+                                </div>
+                           </Link>
+                        </div>
+                      ) 
+
                     })}
+                    
                 </div>
             </div>
             <div id="footer">
-            <a href="#">회사소개</a>
-            <a href="#">이용약관</a>
-            <a href="#">통신판매업 : 123-4567</a>
-            <a href="#">사업자등록번호 : 123-4567-124</a>
+                <Link to="/about">회사소개</Link>
+                <Link to="/use">이용약관</Link>
+                <Link to="/sell">통신판매업 : 123-1234</Link>
+                <Link to="/phone">사업자등록번호 : 456-56-789654</Link>
             </div>
         </div>
     );
